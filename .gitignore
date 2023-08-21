@@ -1,0 +1,7 @@
+.venv
+
+##envrionmonet files
+.env
+
+##apikey
+**/constants.*
