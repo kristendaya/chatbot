@@ -5,3 +5,25 @@
 
 ##apikey
 **/constants.*
+**/constant.*
+##google
+**/.env
+**/client_secret_drive.json
+**/storage.json
+**/*.json
+
+#files
+.pdf
+**/*.pdf
+**/*.zip
+**/*.txt
+
+lang_*
+mine
+mine2
+weaviate
+hackerton_*
+chatbot_*
+
+**/store.py
+**/main.py

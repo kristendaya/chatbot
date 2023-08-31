@@ -1,7 +1,10 @@
 # Create a new weaviate vector database and store the result of the generated embeddings
-
+import os
 import weaviate
 import streamlit as st
+
+os.environ["OPENAI_API_KEY"] =""
+
 
 @st.cache_data
 def store_embeddings(embeddings):
@@ -10,9 +13,11 @@ def store_embeddings(embeddings):
     url=st.secrets["WEAVIATE_CLUSTER_URL"],
     additional_headers={
         'X-OpenAI-Api-Key': os.environ["OPENAI_API_KEY"]
-    }
+    },
     auth_client_secret=auth_config
-)
+    )
+    
+    
 # def store_embeddings(embeddings):
 #     client = weaviate.Client(
 #         url=st.secrets["WEAVIATE_CLUSTER_URL"],
@@ -22,7 +27,7 @@ def store_embeddings(embeddings):
 #     )
 
     try:
-        client.schema.delete_all()
+        weaviate_client.schema.delete_all()
         print("Schema deleted successfully...")
     except:
         print("Schema not deleted...")
@@ -56,10 +61,10 @@ def store_embeddings(embeddings):
         ]
     }
 
-    client.schema.create(schema)
+    weaviate_client.schema.create(schema)
     print('Schema created...')
 
-    client.batch.configure(
+    weaviate_client.batch.configure(
         batch_size=10,
         dynamic=True,
         timeout_retries=3,
@@ -73,7 +78,7 @@ def store_embeddings(embeddings):
         }
 
         try:
-            client.batch.add_data_object(pdf_obj, "PDF")
+            weaviate_client.batch.add_data_object(pdf_obj, "PDF")
         except BaseException as error:
             print("Import Failed at: ", i)
             print("An exception occurred: {}".format(error))
@@ -82,6 +87,6 @@ def store_embeddings(embeddings):
 
         print("Status: ", str(i) + "/" + str(len(embeddings) - 1))
 
-    client.batch.flush()
+    weaviate_client.batch.flush()
     print("Job done...")
     return True
